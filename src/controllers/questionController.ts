@@ -28,7 +28,7 @@ export async function createQuestion(req: Request, res: Response, next: NextFunc
 
     const createdQuestion: QuestionDB = await questionService.createQuestion(newQuestion);
 
-    return res.status(200).send(createdQuestion.id);
+    return res.status(200).send({ id: createdQuestion.id });
         
   } catch (error: any) {
     if (error.name === 'NonExistentUser') return res.status(404).send(error.message);

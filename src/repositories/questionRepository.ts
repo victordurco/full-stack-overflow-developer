@@ -20,6 +20,7 @@ export async function createQuestion(question: Question, token: string): Promise
         [question.question, token, question.tags, false]
     );
     const createdQuestion: QuestionDB = result.rows[0];
+    
     return createdQuestion;
 }
 
