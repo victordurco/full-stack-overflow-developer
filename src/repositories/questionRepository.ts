@@ -78,3 +78,36 @@ export async function getUnansweredQuestions(): Promise<QuestionDB[]>{
     const questions: QuestionDB[] = result.rows;
     return questions;
 }
+
+export async function getUnansweredQuestion(id: number): Promise<QuestionDB>{
+    const result = await connection.query(`
+        SELECT
+            questions.question, users.name, users.class, questions.tags, questions.answered,  questions.submited_at as "submitedAt"
+        FROM questions 
+        JOIN users ON users.token = questions.student_token
+        WHERE questions.id = $1;
+    `, [id]);
+    const question: QuestionDB = result.rows[0];
+    return question;
+}
+
+export async function getAnsweredQuestion(id: number): Promise<QuestionDB>{
+    const result = await connection.query(`
+        SELECT
+            questions.question, 
+            users.name, 
+            users.class, 
+            questions.tags, 
+            questions.answered,  
+            questions.submited_at as "submitedAt",
+            answers.answered_at as "answeredAt",
+            answers.answered_by as "answeredBy",
+            answers.answer
+        FROM questions 
+        JOIN users ON users.token = questions.student_token
+        JOIN answers ON answers.question_id = questions.id
+        WHERE questions.id = $1;
+    `, [id]);
+    const question: QuestionDB = result.rows[0];
+    return question;
+}

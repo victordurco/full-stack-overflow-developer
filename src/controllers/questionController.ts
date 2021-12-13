@@ -81,5 +81,17 @@ export async function getUnansweredQuestions(req: Request, res: Response, next: 
   } catch (error: any) {
     next();
   }
-  
+}
+
+export async function getQuestion(req: Request, res: Response, next: NextFunction): Promise<any>{
+  const questionId: number = Number(req.params.id);
+  if (!questionId) return res.sendStatus(400);
+
+  try { 
+    const question: QuestionDB = await questionService.getQuestion(questionId);
+    return res.status(200).send(question);
+  } catch (error: any) {
+    if (error.name === 'NonExistentQuestion') return res.status(404).send(error.message);
+    next();
+  }
 }

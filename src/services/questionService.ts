@@ -49,3 +49,15 @@ export async function getUnansweredQuestions(): Promise<QuestionDB[]>{
     const questions: QuestionDB[] = await questionRepository.getUnansweredQuestions();
     return questions;
 }
+
+export async function getQuestion(id: number): Promise<QuestionDB>{
+    const question: QuestionDB = await questionRepository.getQuestionById(id);
+    let returnQuestion: QuestionDB;
+
+    if (!question) throw new NonExistentQuestion();
+    
+    if (question.answered) returnQuestion = await questionRepository.getAnsweredQuestion(id);
+    else returnQuestion = await questionRepository.getUnansweredQuestion(id);
+
+    return returnQuestion;
+}
