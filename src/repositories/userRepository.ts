@@ -18,10 +18,10 @@ export async function createUser(user: User, token: string): Promise<UserDB> {
     return createdUser;
 }
 
-export async function getUserByName(name: string): Promise<UserDB> {
+export async function getUserByNameAndClass(name: string, studentClass: string): Promise<UserDB> {
     const result = await connection.query(`
-        SELECT * FROM users WHERE name = $1;
-    `, [name]);
+        SELECT * FROM users WHERE name = $1 AND class = $2;
+    `, [name, studentClass]);
     const user: UserDB = result.rows[0];
     return user;
 }
