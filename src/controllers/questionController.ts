@@ -73,3 +73,7 @@ export async function createAnswer(req: Request, res: Response, next: NextFuncti
   }
 
 }
+
+export async function getQuestions(req: Request, res: Response, next: NextFunction): Promise<any>{
+  
+}
