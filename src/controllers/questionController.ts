@@ -66,14 +66,20 @@ export async function createAnswer(req: Request, res: Response, next: NextFuncti
         
   } catch (error: any) {
     if (error.name === 'NonExistentUser') return res.status(404).send(error.message);
-     if (error.name === 'NonExistentQuestion') return res.status(404).send(error.message);
-     if (error.name === 'AlreadyAnsweredQuestion') return res.status(400).send(error.message);
+    if (error.name === 'NonExistentQuestion') return res.status(404).send(error.message);
+    if (error.name === 'AlreadyAnsweredQuestion') return res.status(400).send(error.message);
     if (error.name === 'InvalidAnswer') return res.status(400).send(error.message);
     next();
   }
 
 }
 
-export async function getQuestions(req: Request, res: Response, next: NextFunction): Promise<any>{
+export async function getUnansweredQuestions(req: Request, res: Response, next: NextFunction): Promise<any>{
+  try { 
+    const questions: QuestionDB[] = await questionService.getUnansweredQuestions();
+    return res.status(200).send(questions);
+  } catch (error: any) {
+    next();
+  }
   
 }

@@ -66,3 +66,15 @@ export async function createAnswer(answer: Answer, token:string, id: number): Pr
     return createdAnswer;
 }
 
+export async function getUnansweredQuestions(): Promise<QuestionDB[]>{
+    const result = await connection.query(`
+        SELECT
+            questions.id, questions.question, users.name, users.class, questions.submited_at as "submitedAt"
+        FROM questions 
+        JOIN users ON users.token = questions.student_token
+        WHERE answered = false
+        LIMIT 1000;
+    `);
+    const questions: QuestionDB[] = result.rows;
+    return questions;
+}

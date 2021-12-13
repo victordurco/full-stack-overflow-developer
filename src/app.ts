@@ -20,6 +20,8 @@ app.post('/questions', questionController.createQuestion);
 
 app.post('/questions/:id', questionController.createAnswer);
 
+app.get('/questions', questionController.getUnansweredQuestions);
+
 app.use(serverMiddlewareError);
 
 export default app;

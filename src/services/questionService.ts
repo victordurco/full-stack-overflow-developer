@@ -44,3 +44,8 @@ export async function createAnswer(answer: Answer, token: string, id: number): P
 
     return createdAnswer;
 }
+
+export async function getUnansweredQuestions(): Promise<QuestionDB[]>{
+    const questions: QuestionDB[] = await questionRepository.getUnansweredQuestions();
+    return questions;
+}
