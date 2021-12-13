@@ -6,4 +6,11 @@ class InvalidUser extends Error {
   }
 }
 
-export {InvalidUser}
+class NonExistentUser extends Error {
+    constructor() {
+    super('Usuário não é cadastrado');
+    this.name = 'NonExistentUser';
+  }
+}
+
+export {InvalidUser, NonExistentUser}
