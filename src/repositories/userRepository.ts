@@ -25,3 +25,11 @@ export async function getUserByNameAndClass(name: string, studentClass: string):
     const user: UserDB = result.rows[0];
     return user;
 }
+
+export async function getUserByToken(token: string): Promise<UserDB> {
+    const result = await connection.query(`
+        SELECT * FROM users WHERE token = $1;
+    `, [token]);
+    const user: UserDB = result.rows[0];
+    return user;
+}

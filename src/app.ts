@@ -14,9 +14,11 @@ app.get("/status", (req: Request, res: Response) => {
     res.sendStatus(200);
 });
 
+app.post('/users', userController.createUser);
+
 app.post('/questions', questionController.createQuestion);
 
-app.post('/users', userController.createUser);
+app.post('/questions/:id', questionController.createAnswer);
 
 app.use(serverMiddlewareError);
 

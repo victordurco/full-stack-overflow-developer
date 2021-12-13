@@ -24,7 +24,7 @@ export async function createUser(req: Request, res: Response, next: NextFunction
 
     const createdUser: UserDB = await userService.createUser(newUser);
 
-    return res.status(200).send(createdUser.token);
+    return res.status(201).send(createdUser.token);
         
   } catch (error: any) {
     if (error.name === 'InvalidUser') return res.status(400).send(error.message);

@@ -7,6 +7,11 @@ const newQuestionSchema = joi.object({
   tags: joi.string(),
 });
 
+const newAnswerSchema = joi.object({
+  answer: joi.string().min(2).required(),
+});
+
 export{ 
-    newQuestionSchema
+  newQuestionSchema,
+  newAnswerSchema
 }
