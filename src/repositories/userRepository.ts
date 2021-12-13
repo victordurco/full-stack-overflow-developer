@@ -1,14 +1,12 @@
 import connection from "../database";
-import { v4 as uuid } from "uuid";
 
-interface User {
-    name: string;
-    class: string;
-    token?: string;
+import { User } from '../controllers/userController';
+
+export interface UserDB extends User  {
+    token: string;
 }
 
-export async function createUser(user: User): Promise<User> {
-    const token = uuid();
+export async function createUser(user: User, token: string): Promise<UserDB> {
     const result = await connection.query(`
         INSERT INTO 
             users (name, class, token) 
@@ -16,6 +14,14 @@ export async function createUser(user: User): Promise<User> {
         RETURNING *;`,
         [user.name, user.class, token]
     );
-    const createdUser: User = result.rows[0];
+    const createdUser: UserDB = result.rows[0];
     return createdUser;
+}
+
+export async function getUserByName(name: string): Promise<UserDB> {
+    const result = await connection.query(`
+        SELECT * FROM users WHERE name = $1;
+    `, [name]);
+    const user: UserDB = result.rows[0];
+    return user;
 }
