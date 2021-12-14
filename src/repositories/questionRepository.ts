@@ -66,3 +66,48 @@ export async function createAnswer(answer: Answer, token:string, id: number): Pr
     return createdAnswer;
 }
 
+export async function getUnansweredQuestions(): Promise<QuestionDB[]>{
+    const result = await connection.query(`
+        SELECT
+            questions.id, questions.question, users.name, users.class, questions.submited_at as "submitedAt"
+        FROM questions 
+        JOIN users ON users.token = questions.student_token
+        WHERE answered = false
+        LIMIT 1000;
+    `);
+    const questions: QuestionDB[] = result.rows;
+    return questions;
+}
+
+export async function getUnansweredQuestion(id: number): Promise<QuestionDB>{
+    const result = await connection.query(`
+        SELECT
+            questions.question, users.name, users.class, questions.tags, questions.answered,  questions.submited_at as "submitedAt"
+        FROM questions 
+        JOIN users ON users.token = questions.student_token
+        WHERE questions.id = $1;
+    `, [id]);
+    const question: QuestionDB = result.rows[0];
+    return question;
+}
+
+export async function getAnsweredQuestion(id: number): Promise<QuestionDB>{
+    const result = await connection.query(`
+        SELECT
+            questions.question, 
+            users.name, 
+            users.class, 
+            questions.tags, 
+            questions.answered,  
+            questions.submited_at as "submitedAt",
+            answers.answered_at as "answeredAt",
+            answers.answered_by as "answeredBy",
+            answers.answer
+        FROM questions 
+        JOIN users ON users.token = questions.student_token
+        JOIN answers ON answers.question_id = questions.id
+        WHERE questions.id = $1;
+    `, [id]);
+    const question: QuestionDB = result.rows[0];
+    return question;
+}
